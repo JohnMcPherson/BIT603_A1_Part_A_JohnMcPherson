@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineVerticalCentre"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/tiki" />
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <Button
         android:id="@+id/buttonKiwi"
@@ -48,6 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewKiwi" />
 
+    <!-- Barrier chosen to allow layout to respond correctly to above elements being uneven vertical sizes. Example: smaller image for Tiki -->
     <Button
         android:id="@+id/buttonTiki"
         android:layout_width="wrap_content"
@@ -59,18 +60,19 @@
         android:layout_marginRight="16dp"
         android:text="@string/tiki"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.376"
         app:layout_constraintStart_toStartOf="@+id/guidelineVerticalCentre"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewTiki" />
+        app:layout_constraintTop_toBottomOf="@id/barrierHorizontal1" />
 
-    <!-- Barrier chosen to allow layout to respond correctly to above elements being uneven vertical sizes. Example: smaller image for Tiki -->
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrierHorizontal1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
+        app:constraint_referenced_ids="imageViewKiwi,imageViewTiki"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:constraint_referenced_ids="buttonKiwi,buttonTiki"/>
+        tools:layout_editor_absoluteY="220dp" />
 
     <ImageView
         android:id="@+id/imageViewBuzzyBee"
@@ -83,7 +85,7 @@
         android:layout_marginRight="16dp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalCentre"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrierHorizontal1"
+        app:layout_constraintTop_toBottomOf="@id/buttonKiwi"
         app:srcCompat="@drawable/buzzybee" />
 
     <ImageView
@@ -97,7 +99,7 @@
         android:layout_marginRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineVerticalCentre"
-        app:layout_constraintTop_toBottomOf="@+id/barrierHorizontal1"
+        app:layout_constraintTop_toBottomOf="@id/buttonTiki"
         app:srcCompat="@drawable/gumboots" />
 
     <Button
@@ -112,7 +114,7 @@
         android:text="@string/buzzy_bee"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalCentre"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewBuzzyBee" />
+        app:layout_constraintTop_toBottomOf="@id/barrierHorizontal2" />
 
     <Button
         android:id="@+id/buttonGumboots"
@@ -126,7 +128,7 @@
         android:text="@string/gumboots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineVerticalCentre"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewGumboots" />
+        app:layout_constraintTop_toBottomOf="@id/barrierHorizontal2" />
 
     <!-- Barrier chosen to allow layout to respond correctly to above elements being uneven vertical sizes. Example: smaller image for Buzzy Bee -->
     <androidx.constraintlayout.widget.Barrier
@@ -134,19 +136,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
+        app:constraint_referenced_ids="imageViewBuzzyBee,imageViewGumboots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:constraint_referenced_ids="buttonBuzzyBee,buttonGumboots"/>
+        tools:layout_editor_absoluteY="440dp" />
 
     <TextView
         android:id="@+id/textViewCurrentLeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="192dp"
         android:text="@string/currentLeaderLabel"
+        app:layout_constraintBottom_toTopOf="@+id/buttonToggleCounters"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrierHorizontal2" />
+        app:layout_constraintTop_toBottomOf="@id/barrierHorizontal3" />
 
     <Button
         android:id="@+id/buttonToggleCounters"
@@ -154,7 +159,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
@@ -162,9 +167,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCurrentLeader" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewCurrentLeader"
+        app:layout_constraintVertical_bias="1" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVerticalCentre"
@@ -174,5 +179,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintGuide_percent="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierHorizontal3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="buttonBuzzyBee,buttonGumboots"
+        tools:layout_editor_absoluteX="126dp"
+        tools:layout_editor_absoluteY="440dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
