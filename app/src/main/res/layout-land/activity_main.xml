@@ -4,50 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineVerticalLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_percent="0.25"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineVerticalRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_percent="0.75"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageViewKiwi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/barrierHorizontal1"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalLeft"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/kiwi" />
-
-    <ImageView
-        android:id="@+id/imageViewTiki"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/barrierHorizontal1"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalCentre"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVerticalLeft"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"
-        app:srcCompat="@drawable/tiki" />
+    tools:context=".MainActivity">
 
     <Button
         android:id="@+id/buttonKiwi"
@@ -61,20 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrierHorizontal1" />
 
-    <!-- Barrier chosen to allow layout to respond correctly to above elements being uneven vertical sizes. Example: smaller image for Tiki
-         The kiwi and tiki images are also constrained to the barrier. This aligns images vertically (through their centres) when different sized images are used.
-         Note: this probably goes beyond the scope of the assignment, but I wanted to know how to make the layout
-         more responsive to different image sizes-->
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierHorizontal1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="imageViewKiwi,imageViewTiki"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="220dp" />
-
     <Button
         android:id="@+id/buttonTiki"
         android:layout_width="wrap_content"
@@ -84,30 +27,6 @@
         app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalCentre"
         app:layout_constraintStart_toStartOf="@+id/guidelineVerticalLeft"
         app:layout_constraintTop_toBottomOf="@id/barrierHorizontal1" />
-
-    <ImageView
-        android:id="@+id/imageViewBuzzyBee"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/barrierHorizontal1"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalRight"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVerticalCentre"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/buzzybee" />
-
-    <ImageView
-        android:id="@+id/imageViewGumboots"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toTopOf="@id/barrierHorizontal1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVerticalRight"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gumboots" />
 
     <Button
         android:id="@+id/buttonBuzzyBee"
@@ -131,27 +50,6 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineVerticalRight"
         app:layout_constraintTop_toBottomOf="@id/barrierHorizontal1" />
 
-    <!-- Barrier chosen to allow layout to respond correctly to above elements being uneven vertical sizes.
-         Example: longer name  causes text to use two lines-->
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierHorizontal3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="buttonBuzzyBee,buttonGumboots"
-        tools:layout_editor_absoluteX="126dp"
-        tools:layout_editor_absoluteY="440dp" />
-
-    <TextView
-        android:id="@+id/textViewCurrentLeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/currentLeaderLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrierHorizontal3" />
-
     <Button
         android:id="@+id/buttonToggleCounters"
         android:layout_width="0dp"
@@ -169,6 +67,108 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCurrentLeader"
         app:layout_constraintVertical_bias=".9" />
+
+    <!-- Barrier chosen to allow layout to respond correctly to above elements being uneven vertical sizes. Example: smaller image for Tiki
+         The kiwi and tiki images are also constrained to the barrier. This aligns images vertically (through their centres) when different sized images are used.
+         Note: this probably goes beyond the scope of the assignment, but I wanted to know how to make the layout
+         more responsive to different image sizes-->
+    <ImageView
+        android:id="@+id/imageViewKiwi"
+        android:layout_width="@dimen/cake_image_size"
+        android:layout_height="@dimen/cake_image_size"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/barrierHorizontal1"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalLeft"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/kiwi" />
+
+    <ImageView
+        android:id="@+id/imageViewTiki"
+        android:layout_width="@dimen/cake_image_size"
+        android:layout_height="@dimen/cake_image_size"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/barrierHorizontal1"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalCentre"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVerticalLeft"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:srcCompat="@drawable/tiki" />
+
+    <ImageView
+        android:id="@+id/imageViewBuzzyBee"
+        android:layout_width="@dimen/cake_image_size"
+        android:layout_height="@dimen/cake_image_size"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/barrierHorizontal1"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVerticalCentre"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/buzzybee" />
+
+    <ImageView
+        android:id="@+id/imageViewGumboots"
+        android:layout_width="@dimen/cake_image_size"
+        android:layout_height="@dimen/cake_image_size"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toTopOf="@id/barrierHorizontal1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVerticalRight"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gumboots" />
+
+    <TextView
+        android:id="@+id/textViewCurrentLeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/currentLeaderLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrierHorizontal3" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierHorizontal1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="imageViewKiwi,imageViewTiki"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="220dp" />
+
+    <!-- Barrier chosen to allow layout to respond correctly to above elements being uneven vertical sizes.
+         Example: longer name  causes text to use two lines-->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierHorizontal3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="buttonBuzzyBee,buttonGumboots"
+        tools:layout_editor_absoluteX="126dp"
+        tools:layout_editor_absoluteY="440dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVerticalLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.25"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVerticalRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.75"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVerticalCentre"

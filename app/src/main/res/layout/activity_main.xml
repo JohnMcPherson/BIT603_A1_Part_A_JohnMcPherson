@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageViewKiwi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/cake_image_size"
+        android:layout_height="@dimen/cake_image_size"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/imageViewTiki"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/cake_image_size"
+        android:layout_height="@dimen/cake_image_size"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
@@ -49,7 +49,7 @@
         android:text="@string/kiwi"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVerticalCentre"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewKiwi" />
+        app:layout_constraintTop_toBottomOf="@id/barrierHorizontal1" />
 
     <!-- Barrier chosen to allow layout to respond correctly to above elements being uneven vertical sizes. Example: smaller image for Tiki
          The kiwi and tiki images are also constrained to the barrier. This aligns images vertically (through their centres) when different sized images are used.
@@ -76,14 +76,13 @@
         android:layout_marginRight="16dp"
         android:text="@string/tiki"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.376"
         app:layout_constraintStart_toStartOf="@+id/guidelineVerticalCentre"
         app:layout_constraintTop_toBottomOf="@id/barrierHorizontal1" />
 
     <ImageView
         android:id="@+id/imageViewBuzzyBee"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/cake_image_size"
+        android:layout_height="@dimen/cake_image_size"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
@@ -98,8 +97,8 @@
 
     <ImageView
         android:id="@+id/imageViewGumboots"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/cake_image_size"
+        android:layout_height="@dimen/cake_image_size"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
