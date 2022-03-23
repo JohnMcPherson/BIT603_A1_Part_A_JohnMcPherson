@@ -1,5 +1,5 @@
 /*
-    ASSUMPTIONS
+    ASSUMPTIONS1111111
 */
 
 package com.example.bit603_a1_part_a_johnmcpherson;
@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private final String KEY_BUZZY_BEE = "Buzzy Bee";
     private final String KEY_GUMBOOTS = "Gumboots";
 
-    private final HashMap<String,Integer> salesTallies = new HashMap<>();
+    private final HashMap<String,Integer> salesTotals = new HashMap<>();
+    private final ArrayList<String> salesRegister = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTally(KEY_KIWI);
+                incrementSalesTotal(KEY_KIWI);
             }
         });
 
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTally(KEY_TIKI);
+                incrementSalesTotal(KEY_TIKI);
             }
         });
 
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTally(KEY_BUZZY_BEE);
+                incrementSalesTotal(KEY_BUZZY_BEE);
             }
         });
 
@@ -67,31 +69,31 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTally("Gumboots");
+                incrementSalesTotal("Gumboots");
             }
         });
 
     }
 
 
-    // use a common method for all tally increments. Reduces repetition (DRY principle)
+    // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
     @SuppressWarnings("ConstantConditions")
-    // ignoring the unboxing warning. We have ensured we have a value for currentTally
-    private void incrementSalesTally(String recipient) {
+    // ignoring the unboxing warning. We have ensured we have a value for the current salesTotal
+    private void incrementSalesTotal(String product) {
         // Ensure that the relevant salesVolume has been initialised
         // Done here to reduce repetition of code (DRY principle). This also protects future developers
         // from forgetting to do the initialisation if we add cakes later (leading to null pointer exceptions)
         // The tradeoff is that this test is executed for each increment. But the performance hit should be negligible
-        if (!salesTallies.containsKey(recipient)) {
-            salesTallies.put(recipient, 0);
+        if (!salesTotals.containsKey(product)) {
+            salesTotals.put(product, 0);
         }
 
-        // get the current tally and perform the increment
-        Integer currentTally = salesTallies.get(recipient);
-        salesTallies.put(recipient, currentTally + 1);
+        // get the current total and perform the increment
+        Integer currentTotal = salesTotals.get(product);
+        salesTotals.put(product, currentTotal + 1);
 
         // provide debug logging to test that increments are working correctly
-        Log.d(TAG, "Sales of " + recipient + " increased to " + salesTallies.get(recipient));
+        Log.d(TAG, "Sales of " + product + " increased to " + salesTotals.get(product));
     }
 
     // Save the salesTallies when the screen is rotated. Otherwise we lose them!
@@ -100,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onSaveInstanceState(outState);
 
-        for (HashMap.Entry<String, Integer> salesTallyEntry: salesTallies.entrySet()) {
-            outState.putInt(salesTallyEntry.getKey(), salesTallyEntry.getValue());
+        for (HashMap.Entry<String, Integer> salesTotalEntry: salesTotals.entrySet()) {
+            outState.putInt(salesTotalEntry.getKey(), salesTotalEntry.getValue());
         }
     }
 
@@ -109,13 +111,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        String expectedTallies[] = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS};
-        for (String tallyKey: expectedTallies) {
-            if (savedInstanceState.containsKey(tallyKey)) {
-                salesTallies.put(tallyKey, savedInstanceState.getInt(tallyKey));
+        String productTypes[] = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS};
+        for (String totalKey: productTypes) {
+            if (savedInstanceState.containsKey(totalKey)) {
+                salesTotals.put(totalKey, savedInstanceState.getInt(totalKey));
 
-                // Demonstrate that the tally has been restored correctly
-                Log.d(TAG, "Sales of " + tallyKey + " restored to " + salesTallies.get(tallyKey));
+                // Demonstrate that the total has been restored correctly
+                Log.d(TAG, "Sales of " + totalKey + " restored to " + salesTotals.get(totalKey));
             }
         }
     }
