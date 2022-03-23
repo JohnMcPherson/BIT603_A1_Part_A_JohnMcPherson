@@ -80,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("ConstantConditions")
     // ignoring the unboxing warning. We have ensured we have a value for the current salesTotal
     private void updateSalesRecords(String product) {
+        updateSalesTotal(product);
+
+        updateSalesRegister(product);
+    }
+
+    private void updateSalesTotal(String product) {
         // Ensure that the relevant salesVolume has been initialised
         // Done here to reduce repetition of code (DRY principle). This also protects future developers
         // from forgetting to do the initialisation if we add cakes later (leading to null pointer exceptions)
@@ -94,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
         // provide debug logging to test that increments are working correctly
         Log.d(TAG, "Sales of " + product + " increased to " + salesTotals.get(product));
+    }
 
+    private void updateSalesRegister(String product) {
         // add product to the sales register
         salesRegister.add(product);
 
@@ -102,24 +110,43 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "All sales: " + salesRegister.toString());
     }
 
-    // Save the salesTallies when the screen is rotated. Otherwise we lose them!
+    // Save the salesTotals and salesRegister when the screen is rotated. Otherwise we lose them!
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
 
         super.onSaveInstanceState(outState);
 
+        saveSalesTotals(outState);
+        saveSalesRegister(outState);
+    }
+
+    // save the sales totals for later retrieval
+    private void saveSalesTotals(@NonNull Bundle outState) {
         for (HashMap.Entry<String, Integer> salesTotalEntry: salesTotals.entrySet()) {
             outState.putInt(salesTotalEntry.getKey(), salesTotalEntry.getValue());
         }
     }
 
-    // restore the tallies in the new orientation
+    // save the sales register for later retrieval
+    private void saveSalesRegister(Bundle outState) {
+        outState.putStringArrayList("salesRegister", salesRegister);
+    }
+
+    // restore the salesTotals and salesRegister in the new orientation
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        String productTypes[] = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS};
+
+        restoreSalesTotals(savedInstanceState);
+        restoreSalesRegister(savedInstanceState);
+    }
+
+    // restore the sales totals
+    private void restoreSalesTotals(Bundle savedInstanceState) {
+        String[] productTypes = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS};
         for (String totalKey: productTypes) {
-            if (savedInstanceState.containsKey(totalKey)) {
+            if (savedInstanceState.containsKey(totalKey)) { // check that this product total was saved
+                //load the relevant sales total with the saved total
                 salesTotals.put(totalKey, savedInstanceState.getInt(totalKey));
 
                 // Demonstrate that the total has been restored correctly
@@ -128,4 +155,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void restoreSalesRegister(Bundle savedInstanceState) {
+        // load the salesRegister with salesRegister entries that we saved to the savedInstanceState
+        salesRegister.addAll(savedInstanceState.getStringArrayList("salesRegister"));
+
+        // demonstrate that salesRegister is restored
+        Log.d(TAG, "Restored salesRegister to: " + salesRegister.toString());
+    }
 }
