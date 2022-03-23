@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTotal(KEY_KIWI);
+                updateSalesRecords(KEY_KIWI);
             }
         });
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTotal(KEY_TIKI);
+                updateSalesRecords(KEY_TIKI);
             }
         });
 
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTotal(KEY_BUZZY_BEE);
+                updateSalesRecords(KEY_BUZZY_BEE);
             }
         });
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTotal("Gumboots");
+                updateSalesRecords("Gumboots");
             }
         });
 
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
     @SuppressWarnings("ConstantConditions")
     // ignoring the unboxing warning. We have ensured we have a value for the current salesTotal
-    private void incrementSalesTotal(String product) {
+    private void updateSalesRecords(String product) {
         // Ensure that the relevant salesVolume has been initialised
         // Done here to reduce repetition of code (DRY principle). This also protects future developers
         // from forgetting to do the initialisation if we add cakes later (leading to null pointer exceptions)
@@ -88,12 +88,18 @@ public class MainActivity extends AppCompatActivity {
             salesTotals.put(product, 0);
         }
 
-        // get the current total and perform the increment
+        // get the current sales total (for this product) and increase it by one
         Integer currentTotal = salesTotals.get(product);
         salesTotals.put(product, currentTotal + 1);
 
         // provide debug logging to test that increments are working correctly
         Log.d(TAG, "Sales of " + product + " increased to " + salesTotals.get(product));
+
+        // add product to the sales register
+        salesRegister.add(product);
+
+        // demonstrate that the sales register contains all sales to now
+        Log.d(TAG, "All sales: " + salesRegister.toString());
     }
 
     // Save the salesTallies when the screen is rotated. Otherwise we lose them!
