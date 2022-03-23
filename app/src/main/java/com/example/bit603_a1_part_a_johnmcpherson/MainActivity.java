@@ -24,9 +24,14 @@ public class MainActivity extends AppCompatActivity {
     private final String KEY_TIKI = "Tiki";
     private final String KEY_BUZZY_BEE = "Buzzy Bee";
     private final String KEY_GUMBOOTS = "Gumboots";
+    // productTypes is only used in restoreSalesTotals. But declared and initialised here because any additions/removals to the
+    // keys above should be reflected in a change to the product list below
+    // "Ideally" we would have used a productTypes HashMap or enum (to keep the keys and the productTypes locked together). I decided against that because
+    // it seemed to make the code unnecessarily complex and harder to understand
+    private final String[] productTypes = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS}; // java style declaration - as suggested by AndroidStudio
 
-    private final HashMap<String,Integer> salesTotals = new HashMap<>();
-    private final ArrayList<String> salesRegister = new ArrayList<>();
+    private final HashMap<String,Integer> salesTotals = new HashMap<>(); // to record a sales total for each product
+    private final ArrayList<String> salesRegister = new ArrayList<>(); // to record each sale
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         // add click listeners to do the sales updates
 
-        buttonKiwi.setOnClickListener(new View.OnClickListener() {
+        buttonKiwi.setOnClickListener(new View.OnClickListener() { // AndroidStudio suggests using lambdas. I decided against this as it is beyond the scope of the course
 
             @Override
             public void onClick(View v) {
@@ -69,26 +74,25 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecords("Gumboots");
+                updateSalesRecords(KEY_GUMBOOTS);
             }
         });
 
     }
 
 
-    // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
-    @SuppressWarnings("ConstantConditions")
-    // ignoring the unboxing warning. We have ensured we have a value for the current salesTotal
     private void updateSalesRecords(String product) {
         updateSalesTotal(product);
 
         updateSalesRegister(product);
     }
 
+    // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
+    @SuppressWarnings("ConstantConditions") // ignoring the unboxing warning. We have ensured we have a value for the current salesTotal
     private void updateSalesTotal(String product) {
         // Ensure that the relevant salesVolume has been initialised
         // Done here to reduce repetition of code (DRY principle). This also protects future developers
-        // from forgetting to do the initialisation if we add cakes later (leading to null pointer exceptions)
+        // from forgetting to do the initialisation if we add products later (leading to null pointer exceptions)
         // The tradeoff is that this test is executed for each increment. But the performance hit should be negligible
         if (!salesTotals.containsKey(product)) {
             salesTotals.put(product, 0);
@@ -143,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
 
     // restore the sales totals
     private void restoreSalesTotals(Bundle savedInstanceState) {
-        String[] productTypes = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS};
         for (String totalKey: productTypes) {
             if (savedInstanceState.containsKey(totalKey)) { // check that this product total was saved
                 //load the relevant sales total with the saved total
