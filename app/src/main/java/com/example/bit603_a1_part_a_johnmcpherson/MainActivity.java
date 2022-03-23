@@ -81,4 +81,31 @@ public class MainActivity extends AppCompatActivity {
         // provide debug logging to test that increments are working correctly
         Log.d(TAG, "Sales of " + recipient + " increased to " + salesTallies.get(recipient));
     }
+
+    // Save the salesTallies when the screen is rotated. Otherwise we lose them!
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+
+        for (HashMap.Entry<String, Integer> salesTallyEntry: salesTallies.entrySet()) {
+            outState.putInt(salesTallyEntry.getKey(), salesTallyEntry.getValue());
+        }
+    }
+
+    // restore the tallies in the new orientation
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String expectedTallies[] = {"Kiwi", "Tiki", "Buzzy Bee", "Gumboots"};
+        for (String tallyKey: expectedTallies) {
+            if (savedInstanceState.containsKey(tallyKey)) {
+                salesTallies.put(tallyKey, savedInstanceState.getInt(tallyKey));
+
+                // Demonstrate that the tally has been restored correctly
+                Log.d(TAG, tallyKey + " restored to " + salesTallies.get(tallyKey));
+            }
+        }
+    }
+
 }
