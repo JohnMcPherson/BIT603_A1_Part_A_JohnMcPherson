@@ -1,5 +1,10 @@
+/*
+    ASSUMPTIONS
+*/
+
 package com.example.bit603_a1_part_a_johnmcpherson;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -11,9 +16,15 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    final String TAG = "MainActivity";
+    private final String TAG = "MainActivity";
 
-    final HashMap<String,Integer> salesTallies = new HashMap<>();
+    // We use these keys in more than one place. So stored as variables to reduce the chance of inconsistent spelling
+    private final String KEY_KIWI = "Kiwi";
+    private final String KEY_TIKI = "Tiki";
+    private final String KEY_BUZZY_BEE = "Buzzy Bee";
+    private final String KEY_GUMBOOTS = "Gumboots";
+
+    private final HashMap<String,Integer> salesTallies = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTally("Kiwi");
+                incrementSalesTally(KEY_KIWI);
             }
         });
 
@@ -40,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTally("Tiki");
+                incrementSalesTally(KEY_TIKI);
             }
         });
 
@@ -48,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                incrementSalesTally("Buzzy Bee");
+                incrementSalesTally(KEY_BUZZY_BEE);
             }
         });
 
@@ -67,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("ConstantConditions")
     // ignoring the unboxing warning. We have ensured we have a value for currentTally
     private void incrementSalesTally(String recipient) {
-        // Ensure that the relevant salesVolume has been initiallised
-        // Done here to reduce repetition of code (DRY principle)
+        // Ensure that the relevant salesVolume has been initialised
+        // Done here to reduce repetition of code (DRY principle). This also protects future developers
+        // from forgetting to do the initialisation if we add cakes later (leading to null pointer exceptions)
         // The tradeoff is that this test is executed for each increment. But the performance hit should be negligible
         if (!salesTallies.containsKey(recipient)) {
             salesTallies.put(recipient, 0);
@@ -84,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Save the salesTallies when the screen is rotated. Otherwise we lose them!
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
 
         super.onSaveInstanceState(outState);
 
@@ -97,13 +109,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        String expectedTallies[] = {"Kiwi", "Tiki", "Buzzy Bee", "Gumboots"};
+        String expectedTallies[] = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS};
         for (String tallyKey: expectedTallies) {
             if (savedInstanceState.containsKey(tallyKey)) {
                 salesTallies.put(tallyKey, savedInstanceState.getInt(tallyKey));
 
                 // Demonstrate that the tally has been restored correctly
-                Log.d(TAG, tallyKey + " restored to " + salesTallies.get(tallyKey));
+                Log.d(TAG, "Sales of " + tallyKey + " restored to " + salesTallies.get(tallyKey));
             }
         }
     }
