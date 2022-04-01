@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
     // it seemed to make the code unnecessarily complex and harder to understand
     private final String[] productTypes = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS}; // java style declaration - as suggested by AndroidStudio
 
+    // buttonToProduct is used to:
+    // - identify the sales total to update each button
+    // - make the onClickListeners, associated with each button, slightly more generic (a small bonus)
+    private final HashMap<Button, String> buttonToProduct = new HashMap<>();
+
     private final HashMap<String,Integer> salesTotals = new HashMap<>(); // to record a sales total for each product
     private final ArrayList<String> salesRegister = new ArrayList<>(); // to record each sale
 
@@ -59,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
         textViewLeaderMessage = findViewById(R.id.textViewCurrentLeader);
 
         Button buttonToggleCounters = findViewById(R.id.buttonToggleCounters);
+
+        //initialise buttonToProduct
+        buttonToProduct.put(buttonKiwi, KEY_KIWI);
+        buttonToProduct.put(buttonTiki, KEY_TIKI);
+        buttonToProduct.put(buttonBuzzyBee, KEY_BUZZY_BEE);
+        buttonToProduct.put(buttonGumboots, KEY_GUMBOOTS);
 
         // add click listeners to do the sales updates
 
@@ -205,11 +216,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayProductTotals() {
-        String kiwiTotal = String.valueOf(salesTotals.get(KEY_KIWI));
-        buttonKiwi.setText(kiwiTotal);
+        // using the two hashmaps allows us to build and debug code to update all the buttons in one set of code
+        // slightly more complex; but we avoid repeating the same code pattern 4 times
+        for (HashMap.Entry<Button, String> buttonEntry: buttonToProduct.entrySet()) {
+            Button button = buttonEntry.getKey();
+            String productName = buttonEntry.getValue();
+            Integer salesTotal = salesTotals.get(productName);
+            button.setText(String.valueOf(salesTotal));
+        }
     }
 
     private void displayProductNames() {
+        // HashMap NOT used here because it's simpler to directly code the "map" between the button and the string value to be displayed
+        buttonKiwi.setText(getString(R.string.kiwi));
+        buttonTiki.setText(getString(R.string.tiki));
+        buttonBuzzyBee.setText(getString(R.string.buzzy_bee));
+        buttonGumboots.setText(getString(R.string.gumboots));
     }
 
     // Save the salesTotals and salesRegister when the screen is rotated. Otherwise we lose them!
