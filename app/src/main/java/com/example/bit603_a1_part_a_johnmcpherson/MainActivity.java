@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private final String KEY_GUMBOOTS = "Gumboots";
     // productTypes is only used in restoreSalesTotals. But declared and initialised here because any additions/removals to the
     // keys above should be reflected in a change to the product list below
-    // "Ideally" we would have used a productTypes HashMap or enum (to keep the keys and the productTypes locked together). I decided against that because
+    // We could have used a productTypes HashMap or enum (to keep the keys and the productTypes locked together). I decided against that because
     // it seemed to make the code unnecessarily complex and harder to understand
     private final String[] productTypes = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS}; // java style declaration - as suggested by AndroidStudio
 
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecordsAdndLeaderMessage(KEY_KIWI);
+                updateSalesRecordsAndLeaderMessage(KEY_KIWI);
             }
         });
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecordsAdndLeaderMessage(KEY_TIKI);
+                updateSalesRecordsAndLeaderMessage(KEY_TIKI);
             }
         });
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecordsAdndLeaderMessage(KEY_BUZZY_BEE);
+                updateSalesRecordsAndLeaderMessage(KEY_BUZZY_BEE);
             }
         });
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecordsAdndLeaderMessage(KEY_GUMBOOTS);
+                updateSalesRecordsAndLeaderMessage(KEY_GUMBOOTS);
             }
         });
 
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     // There is a common pattern for the sale of each product.
     // Collected here to avoid repeating ourselves (DRY principle)
-    private void updateSalesRecordsAdndLeaderMessage(String product) {
+    private void updateSalesRecordsAndLeaderMessage(String product) {
         updateSalesTotal(product);
 
         updateSalesRegister(product);
@@ -142,21 +142,21 @@ public class MainActivity extends AppCompatActivity {
                     leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
                 }
             }
-            // Using iterator because it provides a clean way to
-            // - get the first leader, no matter what
-            // - determine if there are more leaders, and acting accordingly
+            // Using iterator because it provides a clean way to:
+            // - get the first leader, no matter what;
+            // - determine if there are more leaders, and act accordingly.
             // (Adding the commas is the tricky bit, we need one less than there are leaders)
             Iterator<Map.Entry<String, Integer>> entrySetIterator = leadingTotals.entrySet().iterator();
 
-            String leadersString = "";
-            // entrySetIterator will always haveNext(), with the above code. But, it is safer to put in a check now
+            String leaderListString = "";
+            // entrySetIterator should always haveNext(). But, it is simpler and safer to put in a check now
             // than to risk a change of logic (above) that allows entrySetIterator.hasNext() to be false (and cause an exception)
             if (entrySetIterator.hasNext()) {
-                leadersString = entrySetIterator.next().getKey();
+                leaderListString = entrySetIterator.next().getKey();
             }
 
             String leaderHeaderString;
-            // we have already iterated once, so this .hasNext() could produce a different result from the last one
+            // we have identified a leader. Test to see if there are more
             if (entrySetIterator.hasNext()) { // We have more than one leader, so our header text is set up accordingly
                 leaderHeaderString = getString(R.string.current_leaders_header); // use plural
             } else {
@@ -164,24 +164,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // add extra leader(s) (if we have a tie)
+            // (we could have put this loop inside the above if statement, and saved a redundant test. But reduced nesting is easier to follow)
             while (entrySetIterator.hasNext()) {
-                leadersString = leadersString + ", " + entrySetIterator.next().getKey();
+                // the comma reinforces that "Buzzy Bee" is a single product (not two products)
+                leaderListString = leaderListString + ", " + entrySetIterator.next().getKey();
             }
 
             // put the complete string together
-            String leaderDisplayString = leaderHeaderString + ": " + leadersString;
+            String leaderDisplayString = leaderHeaderString + ": " + leaderListString;
 
-            if (leadingTotals.size() == 1) {
-                String leaderName = leadingTotals.entrySet().iterator().next().getKey();
-                leadersString = "Current Leader: " + leaderName;
-            } else {
-                leadersString = "Current Leaders:";
-
-                for (HashMap.Entry<String, Integer> winningScore: leadingTotals.entrySet()) {
-                    leadersString = leadersString + " " + winningScore.getKey();
-                }
-            }
-
+            // display the message
             textViewLeaderMessage.setText(leaderDisplayString);
         }
 
