@@ -11,9 +11,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private final HashMap<String,Integer> salesTotals = new HashMap<>(); // to record a sales total for each product
     private final ArrayList<String> salesRegister = new ArrayList<>(); // to record each sale
 
+    // displayLeaderMessage declared outside onCreate; so it can be accessed by updateWinnerMessage()
+    TextView textViewLeaderMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         Button buttonTiki = findViewById(R.id.buttonTiki);
         Button buttonBuzzyBee = findViewById(R.id.buttonBuzzyBee);
         Button buttonGumboots = findViewById(R.id.buttonGumboots);
+        // See comment in strings file (for how we have initialised this message for no sales)
+        textViewLeaderMessage = findViewById(R.id.textViewCurrentLeader);
 
         // add click listeners to do the sales updates
 
@@ -50,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecords(KEY_KIWI);
+                updateSalesRecordsAdndLeaderMessage(KEY_KIWI);
             }
         });
 
@@ -58,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecords(KEY_TIKI);
+                updateSalesRecordsAdndLeaderMessage(KEY_TIKI);
             }
         });
 
@@ -66,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecords(KEY_BUZZY_BEE);
+                updateSalesRecordsAdndLeaderMessage(KEY_BUZZY_BEE);
             }
         });
 
@@ -74,17 +82,21 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                updateSalesRecords(KEY_GUMBOOTS);
+                updateSalesRecordsAdndLeaderMessage(KEY_GUMBOOTS);
             }
         });
 
     }
 
 
-    private void updateSalesRecords(String product) {
+    // There is a common pattern for the sale of each product.
+    // Collected here to avoid repeating ourselves (DRY principle)
+    private void updateSalesRecordsAdndLeaderMessage(String product) {
         updateSalesTotal(product);
 
         updateSalesRegister(product);
+
+        updateLeaderMessage();
     }
 
     // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
@@ -113,6 +125,65 @@ public class MainActivity extends AppCompatActivity {
         // demonstrate that the sales register contains all sales to now
         Log.d(TAG, "All sales: " + salesRegister.toString());
     }
+
+        public void updateLeaderMessage() {
+            HashMap<String, Integer> leadingTotals = new HashMap<>();
+            Integer leadingValue = 0;
+            for (HashMap.Entry<String, Integer> salesTotalToTest: salesTotals.entrySet()) {
+                if (leadingTotals.isEmpty() || salesTotalToTest.getValue() > leadingValue) {
+                    // we have a new clear leader
+                    // - by virtue of this being the first total tested
+                    // - OR because this score is greater than the last highest
+                    // so we make sure our new entry is the only one
+                    leadingTotals.clear();
+                    leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
+                    leadingValue = salesTotalToTest.getValue();
+                } else if (salesTotalToTest.getValue().equals(leadingValue)) {
+                    leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
+                }
+            }
+            // Using iterator because it provides a clean way to
+            // - get the first leader, no matter what
+            // - determine if there are more leaders, and acting accordingly
+            // (Adding the commas is the tricky bit, we need one less than there are leaders)
+            Iterator<Map.Entry<String, Integer>> entrySetIterator = leadingTotals.entrySet().iterator();
+
+            String leadersString = "";
+            // entrySetIterator will always haveNext(), with the above code. But, it is safer to put in a check now
+            // than to risk a change of logic (above) that allows entrySetIterator.hasNext() to be false (and cause an exception)
+            if (entrySetIterator.hasNext()) {
+                leadersString = entrySetIterator.next().getKey();
+            }
+
+            String leaderHeaderString;
+            // we have already iterated once, so this .hasNext() could produce a different result from the last one
+            if (entrySetIterator.hasNext()) { // We have more than one leader, so our header text is set up accordingly
+                leaderHeaderString = getString(R.string.current_leaders_header); // use plural
+            } else {
+                leaderHeaderString = getString(R.string.current_leader_header);
+            }
+
+            // add extra leader(s) (if we have a tie)
+            while (entrySetIterator.hasNext()) {
+                leadersString = leadersString + ", " + entrySetIterator.next().getKey();
+            }
+
+            // put the complete string together
+            String leaderDisplayString = leaderHeaderString + ": " + leadersString;
+
+            if (leadingTotals.size() == 1) {
+                String leaderName = leadingTotals.entrySet().iterator().next().getKey();
+                leadersString = "Current Leader: " + leaderName;
+            } else {
+                leadersString = "Current Leaders:";
+
+                for (HashMap.Entry<String, Integer> winningScore: leadingTotals.entrySet()) {
+                    leadersString = leadersString + " " + winningScore.getKey();
+                }
+            }
+
+            textViewLeaderMessage.setText(leaderDisplayString);
+        }
 
     // Save the salesTotals and salesRegister when the screen is rotated. Otherwise we lose them!
     @Override
