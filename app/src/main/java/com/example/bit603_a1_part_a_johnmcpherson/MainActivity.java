@@ -2,9 +2,13 @@
     ASSUMPTIONS
 
     -   I have assumed that it is OK to increase the complexity of the code in order to reduce repetition.
+        L02 "More advanced conditional and iterative methods used."
         For example, the four product buttons have similar functionality associated with them. On click, they each
         do a similar thing. And we need to display totals to each of those buttons. So I used a HashMap to support
         loops for those functions. The trade-off is that it takes a little more effort to understand the code.
+
+    -   I have also assumed that L02 "An advanced approach has been taken" means that use of lambdas is OK (despite not being taught
+        in the course
 */
 
 package com.example.bit603_a1_part_a_johnmcpherson;
@@ -14,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,6 +29,11 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
+
+    // these keys are used more than once, so use constants to avoid problems with mis-spelling
+    private final String KEY_SALES_REGISTER = "salesRegister";
+    private final String KEY_DISPLAY_TOTALS_FLAG = "displayTotalsFlag";
+
 
 
     // buttonToProductNme is used to:
@@ -73,27 +81,17 @@ public class MainActivity extends AppCompatActivity {
         for (HashMap.Entry<Button, String> buttonEntry : buttonToProductName.entrySet()) {
             Button productButton = buttonEntry.getKey();
             String productKey = buttonEntry.getValue();
-            productButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    updateSalesRecordsAndLeaderMessage(productKey);
-                }
-            });
+            productButton.setOnClickListener(v -> updateSalesRecordsAndLeaderMessage(productKey));
         }
 
 
         // allow the Toggle Counters button to make the display change
-        buttonToggleCounters.setOnClickListener(new View.OnClickListener() {
+        buttonToggleCounters.setOnClickListener(v -> {
+            // toggle whether or not we should display counters
+            displayTotals = !displayTotals;
 
-            @Override
-            public void onClick(View v) {
-                // toggle whether or not we should display counters
-                displayTotals = !displayTotals;
-
-                // update the product button displays (based on the new value of displayTotals)
-                updateProductButtons();
-            }
+            // update the product button displays (based on the new value of displayTotals)
+            updateProductButtons();
         });
 
         // initialise salesTotals
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         salesRegister.add(product);
 
         // demonstrate that the sales register contains all sales to now
-        Log.d(TAG, "All sales: " + salesRegister.toString());
+        Log.d(TAG, "All sales: " + salesRegister);
     }
 
     private void updateLeaderMessage() {
@@ -177,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         // (we could have put this loop inside the above if statement, and saved a redundant test. But reduced nesting is easier to follow)
         while (entrySetIterator.hasNext()) {
             // the comma reinforces that "Buzzy Bee" is a single product (not two products)
+            // Not using StringBuilder (despite warning from AndroidStudio). The minimal performance gain seems to be outweighed by the extra complexity
             leaderListString = leaderListString + ", " + entrySetIterator.next().getKey();
         }
 
@@ -236,11 +235,12 @@ public class MainActivity extends AppCompatActivity {
 
     // save the sales register for later retrieval
     private void saveSalesRegister(Bundle outState) {
-        outState.putStringArrayList("salesRegister", salesRegister);
+        // the complete salesRegister will be saved
+        outState.putStringArrayList(KEY_SALES_REGISTER, salesRegister);
     }
 
     private void saveDisplayTotalsFlag(Bundle outState) {
-        outState.putBoolean("displayTotals", displayTotals);
+        outState.putBoolean(KEY_DISPLAY_TOTALS_FLAG, displayTotals);
     }
 
     // restore the salesTotals and salesRegister in the new orientation
@@ -273,15 +273,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void restoreSalesRegister(Bundle savedInstanceState) {
         // load the salesRegister with salesRegister entries that we saved to the savedInstanceState
-        salesRegister.addAll(savedInstanceState.getStringArrayList("salesRegister"));
+        salesRegister.addAll(savedInstanceState.getStringArrayList(KEY_SALES_REGISTER));
 
         // demonstrate that salesRegister is restored
-        Log.d(TAG, "Restored salesRegister to: " + salesRegister.toString());
+        Log.d(TAG, "Restored salesRegister to: " + salesRegister);
     }
 
     private void restoreDisplayTotalsFlag(Bundle savedInstanceState) {
-        displayTotals = savedInstanceState.getBoolean("displayTotals");
+        displayTotals = savedInstanceState.getBoolean(KEY_DISPLAY_TOTALS_FLAG);
     }
-
-
 }
