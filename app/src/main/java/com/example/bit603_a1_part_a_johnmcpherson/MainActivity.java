@@ -27,22 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
 
-    // We use these keys in more than one place. So stored as variables to reduce the chance of inconsistent spelling
-    private final String KEY_KIWI = "Kiwi";
-    private final String KEY_TIKI = "Tiki";
-    private final String KEY_BUZZY_BEE = "Buzzy Bee";
-    private final String KEY_GUMBOOTS = "Gumboots";
-    // productTypes is only used in restoreSalesTotals. But declared and initialised here because any additions/removals to the
-    // keys above should be reflected in a change to the product list below
 
-    // We could have used a productTypes HashMap or enum (to keep the keys and the productTypes locked together). I decided against that because
-    // (unlike some other places in the code) it seemed to make the code unnecessarily complex and harder to understand
-    private final String[] productTypes = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS}; // java style declaration - as suggested by AndroidStudio
-
-    // buttonToProduct is used to:
-    // - identify the sales total to update each button
-    // - make the onClickListeners, associated with each button, slightly more generic (a small bonus)
-    private final HashMap<Button, String> buttonToProduct = new HashMap<>();
+    // buttonToProductNme is used to:
+    // - identify the sales total to update each button (main reason)
+    // - reduce the code required to set the "product button"" OnClickListeners (a bonus)
+    private final HashMap<Button, String> buttonToProductName = new HashMap<>();
 
     private final HashMap<String,Integer> salesTotals = new HashMap<>(); // to record a sales total for each product
     private final ArrayList<String> salesRegister = new ArrayList<>(); // to record each sale
@@ -71,17 +60,17 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonToggleCounters = findViewById(R.id.buttonToggleCounters);
 
-        //initialise buttonToProduct
-        buttonToProduct.put(buttonKiwi, KEY_KIWI);
-        buttonToProduct.put(buttonTiki, KEY_TIKI);
-        buttonToProduct.put(buttonBuzzyBee, KEY_BUZZY_BEE);
-        buttonToProduct.put(buttonGumboots, KEY_GUMBOOTS);
+        //initialise buttonToProductName
+        buttonToProductName.put(buttonKiwi, "Kiwi");
+        buttonToProductName.put(buttonTiki, "Tiki");
+        buttonToProductName.put(buttonBuzzyBee, "Buzzy Bee");
+        buttonToProductName.put(buttonGumboots, "Gumboots");
 
         // add OnClicklisteners to do the sales updates
         // we created buttonToProduct to help us update the displayed totals
-        // But since we have that map, we can use it here to help us setOnClickLister for each button
+        // But since we have that map, we can use it here to help us set the OnClickListener for each button
 
-        for (HashMap.Entry<Button, String> buttonEntry : buttonToProduct.entrySet()) {
+        for (HashMap.Entry<Button, String> buttonEntry : buttonToProductName.entrySet()) {
             Button productButton = buttonEntry.getKey();
             String productKey = buttonEntry.getValue();
             productButton.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // initialise salesTotals
-        for (String productName: productTypes) {
+        for (Map.Entry<Button, String> buttonToProductNameEntry: buttonToProductName.entrySet()) {
+            String productName = buttonToProductNameEntry.getValue();
             salesTotals.put(productName, 0);
         }
     }
@@ -206,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     private void displayProductTotals() {
         // using the two hashmaps allows us to build and debug code to update all the buttons in one set of code
         // slightly more complex; but we avoid repeating the same code pattern 4 times
-        for (HashMap.Entry<Button, String> buttonEntry: buttonToProduct.entrySet()) {
+        for (HashMap.Entry<Button, String> buttonEntry: buttonToProductName.entrySet()) {
             Button button = buttonEntry.getKey();
             String productName = buttonEntry.getValue();
             Integer salesTotal = salesTotals.get(productName);
@@ -255,8 +245,9 @@ public class MainActivity extends AppCompatActivity {
 
     // restore the sales totals
     private void restoreSalesTotals(Bundle savedInstanceState) {
-        for (String totalKey: productTypes) {
-            if (savedInstanceState.containsKey(totalKey)) { // check that this product total was saved
+        for (Map.Entry<Button, String> buttonAndProductName: buttonToProductName.entrySet()) {
+            String totalKey = buttonAndProductName.getValue();
+            if (savedInstanceState.containsKey(totalKey)) { // check that this product total was saved. It should have been!
                 //load the relevant sales total with the saved total
                 salesTotals.put(totalKey, savedInstanceState.getInt(totalKey));
 
