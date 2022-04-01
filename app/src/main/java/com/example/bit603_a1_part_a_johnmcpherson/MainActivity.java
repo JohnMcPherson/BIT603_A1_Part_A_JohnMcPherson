@@ -78,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // initialise salesTotals
+        for (String productName: productTypes) {
+            salesTotals.put(productName, 0);
+        }
+
         buttonGumboots.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -102,13 +107,6 @@ public class MainActivity extends AppCompatActivity {
     // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
     @SuppressWarnings("ConstantConditions") // ignoring the unboxing warning. We have ensured we have a value for the current salesTotal
     private void updateSalesTotal(String product) {
-        // Ensure that the relevant salesVolume has been initialised
-        // Done here to reduce repetition of code (DRY principle). This also protects future developers
-        // from forgetting to do the initialisation if we add products later (leading to null pointer exceptions)
-        // The tradeoff is that this test is executed for each increment. But the performance hit should be negligible
-        if (!salesTotals.containsKey(product)) {
-            salesTotals.put(product, 0);
-        }
 
         // get the current sales total (for this product) and increase it by one
         Integer currentTotal = salesTotals.get(product);
@@ -126,56 +124,56 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "All sales: " + salesRegister.toString());
     }
 
-        public void updateLeaderMessage() {
-            HashMap<String, Integer> leadingTotals = new HashMap<>();
-            Integer leadingValue = 0;
-            for (HashMap.Entry<String, Integer> salesTotalToTest: salesTotals.entrySet()) {
-                if (leadingTotals.isEmpty() || salesTotalToTest.getValue() > leadingValue) {
-                    // we have a new clear leader
-                    // - by virtue of this being the first total tested
-                    // - OR because this score is greater than the last highest
-                    // so we make sure our new entry is the only one
-                    leadingTotals.clear();
-                    leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
-                    leadingValue = salesTotalToTest.getValue();
-                } else if (salesTotalToTest.getValue().equals(leadingValue)) {
-                    leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
-                }
+    private void updateLeaderMessage() {
+        HashMap<String, Integer> leadingTotals = new HashMap<>();
+        Integer leadingValue = 0;
+        for (HashMap.Entry<String, Integer> salesTotalToTest: salesTotals.entrySet()) {
+            if (leadingTotals.isEmpty() || salesTotalToTest.getValue() > leadingValue) {
+                // we have a new clear leader
+                // - by virtue of this being the first total tested
+                // - OR because this score is greater than the last highest
+                // so we make sure our new entry is the only one
+                leadingTotals.clear();
+                leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
+                leadingValue = salesTotalToTest.getValue();
+            } else if (salesTotalToTest.getValue().equals(leadingValue)) {
+                leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
             }
-            // Using iterator because it provides a clean way to:
-            // - get the first leader, no matter what;
-            // - determine if there are more leaders, and act accordingly.
-            // (Adding the commas is the tricky bit, we need one less than there are leaders)
-            Iterator<Map.Entry<String, Integer>> entrySetIterator = leadingTotals.entrySet().iterator();
-
-            String leaderListString = "";
-            // entrySetIterator should always haveNext(). But, it is simpler and safer to put in a check now
-            // than to risk a change of logic (above) that allows entrySetIterator.hasNext() to be false (and cause an exception)
-            if (entrySetIterator.hasNext()) {
-                leaderListString = entrySetIterator.next().getKey();
-            }
-
-            String leaderHeaderString;
-            // we have identified a leader. Test to see if there are more
-            if (entrySetIterator.hasNext()) { // We have more than one leader, so our header text is set up accordingly
-                leaderHeaderString = getString(R.string.current_leaders_header); // use plural
-            } else {
-                leaderHeaderString = getString(R.string.current_leader_header);
-            }
-
-            // add extra leader(s) (if we have a tie)
-            // (we could have put this loop inside the above if statement, and saved a redundant test. But reduced nesting is easier to follow)
-            while (entrySetIterator.hasNext()) {
-                // the comma reinforces that "Buzzy Bee" is a single product (not two products)
-                leaderListString = leaderListString + ", " + entrySetIterator.next().getKey();
-            }
-
-            // put the complete string together
-            String leaderDisplayString = leaderHeaderString + ": " + leaderListString;
-
-            // display the message
-            textViewLeaderMessage.setText(leaderDisplayString);
         }
+        // Using iterator because it provides a clean way to:
+        // - get the first leader, no matter what;
+        // - determine if there are more leaders, and act accordingly.
+        // (Adding the commas is the tricky bit, we need one less than there are leaders)
+        Iterator<Map.Entry<String, Integer>> entrySetIterator = leadingTotals.entrySet().iterator();
+
+        String leaderListString = "";
+        // entrySetIterator should always haveNext(). But, it is simpler and safer to put in a check now
+        // than to risk a change of logic (above) that allows entrySetIterator.hasNext() to be false (and cause an exception)
+        if (entrySetIterator.hasNext()) {
+            leaderListString = entrySetIterator.next().getKey();
+        }
+
+        String leaderHeaderString;
+        // we have identified a leader. Test to see if there are more
+        if (entrySetIterator.hasNext()) { // We have more than one leader, so our header text is set up accordingly
+            leaderHeaderString = getString(R.string.current_leaders_header); // use plural
+        } else {
+            leaderHeaderString = getString(R.string.current_leader_header);
+        }
+
+        // add extra leader(s) (if we have a tie)
+        // (we could have put this loop inside the above if statement, and saved a redundant test. But reduced nesting is easier to follow)
+        while (entrySetIterator.hasNext()) {
+            // the comma reinforces that "Buzzy Bee" is a single product (not two products)
+            leaderListString = leaderListString + ", " + entrySetIterator.next().getKey();
+        }
+
+        // put the complete string together
+        String leaderDisplayString = leaderHeaderString + ": " + leaderListString;
+
+        // display the message
+        textViewLeaderMessage.setText(leaderDisplayString);
+    }
 
     // Save the salesTotals and salesRegister when the screen is rotated. Otherwise we lose them!
     @Override
