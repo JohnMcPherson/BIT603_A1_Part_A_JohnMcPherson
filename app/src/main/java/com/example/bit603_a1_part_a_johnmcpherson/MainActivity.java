@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
         saveSalesTotals(outState);
         saveSalesRegister(outState);
+        saveDisplayTotalsFlag(outState);
     }
 
     // save the sales totals for later retrieval
@@ -238,6 +239,10 @@ public class MainActivity extends AppCompatActivity {
         outState.putStringArrayList("salesRegister", salesRegister);
     }
 
+    private void saveDisplayTotalsFlag(Bundle outState) {
+        outState.putBoolean("displayTotals", displayTotals);
+    }
+
     // restore the salesTotals and salesRegister in the new orientation
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -245,6 +250,11 @@ public class MainActivity extends AppCompatActivity {
 
         restoreSalesTotals(savedInstanceState);
         restoreSalesRegister(savedInstanceState);
+        restoreDisplayTotalsFlag(savedInstanceState);
+
+        // update the display, based on the restored data
+        updateProductButtons();
+        updateLeaderMessage();
     }
 
     // restore the sales totals
@@ -268,4 +278,10 @@ public class MainActivity extends AppCompatActivity {
         // demonstrate that salesRegister is restored
         Log.d(TAG, "Restored salesRegister to: " + salesRegister.toString());
     }
+
+    private void restoreDisplayTotalsFlag(Bundle savedInstanceState) {
+        displayTotals = savedInstanceState.getBoolean("displayTotals");
+    }
+
+
 }
