@@ -1,5 +1,10 @@
 /*
-    ASSUMPTIONS1111111
+    ASSUMPTIONS
+
+    -   I have assumed that it is OK to increase the complexity of the code in order to reduce repetition.
+        For example, the four product buttons have similar functionality associated with them. On click, they each
+        do a similar thing. And we need to display totals to each of those buttons. So I used a HashMap to support
+        loops for those functions. The trade-off is that it takes a little more effort to understand the code.
 */
 
 package com.example.bit603_a1_part_a_johnmcpherson;
@@ -29,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private final String KEY_GUMBOOTS = "Gumboots";
     // productTypes is only used in restoreSalesTotals. But declared and initialised here because any additions/removals to the
     // keys above should be reflected in a change to the product list below
+
     // We could have used a productTypes HashMap or enum (to keep the keys and the productTypes locked together). I decided against that because
-    // it seemed to make the code unnecessarily complex and harder to understand
+    // (unlike some other places in the code) it seemed to make the code unnecessarily complex and harder to understand
     private final String[] productTypes = {KEY_KIWI, KEY_TIKI, KEY_BUZZY_BEE, KEY_GUMBOOTS}; // java style declaration - as suggested by AndroidStudio
 
     // buttonToProduct is used to:
@@ -71,39 +77,21 @@ public class MainActivity extends AppCompatActivity {
         buttonToProduct.put(buttonBuzzyBee, KEY_BUZZY_BEE);
         buttonToProduct.put(buttonGumboots, KEY_GUMBOOTS);
 
-        // add click listeners to do the sales updates
+        // add OnClicklisteners to do the sales updates
+        // we created buttonToProduct to help us update the displayed totals
+        // But since we have that map, we can use it here to help us setOnClickLister for each button
 
-        buttonKiwi.setOnClickListener(new View.OnClickListener() { // AndroidStudio suggests using lambdas. I decided against this as it is beyond the scope of the course
+        for (HashMap.Entry<Button, String> buttonEntry : buttonToProduct.entrySet()) {
+            Button productButton = buttonEntry.getKey();
+            String productKey = buttonEntry.getValue();
+            productButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                updateSalesRecordsAndLeaderMessage(KEY_KIWI);
-            }
-        });
-
-        buttonTiki.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                updateSalesRecordsAndLeaderMessage(KEY_TIKI);
-            }
-        });
-
-        buttonBuzzyBee.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                updateSalesRecordsAndLeaderMessage(KEY_BUZZY_BEE);
-            }
-        });
-
-        buttonGumboots.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                updateSalesRecordsAndLeaderMessage(KEY_GUMBOOTS);
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    updateSalesRecordsAndLeaderMessage(productKey);
+                }
+            });
+        }
 
         buttonToggleCounters.setOnClickListener(new View.OnClickListener() {
 
@@ -136,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
         updateLeaderMessage();
     }
 
-    // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
-    @SuppressWarnings("ConstantConditions") // ignoring the unboxing warning. We have ensured we have a value for the current salesTotal
+     // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
+    @SuppressWarnings("ConstantConditions") // ignoring the unboxing warning. We have initialised (or updated) each salesTotal
     private void updateSalesTotal(String product) {
 
         // get the current sales total (for this product) and increase it by one
