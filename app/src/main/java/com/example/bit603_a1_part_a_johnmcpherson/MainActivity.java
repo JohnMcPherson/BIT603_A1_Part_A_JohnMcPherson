@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+
+        // allow the Toggle Counters button to make the display change
         buttonToggleCounters.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -185,7 +187,9 @@ public class MainActivity extends AppCompatActivity {
         textViewLeaderMessage.setText(leaderDisplayString);
     }
 
+    // this functionality is used in two places. So extracted into a separate function
     private void updateProductButtons() {
+        // update the "product buttons", depending on current value of displayTotals
         if (displayTotals) {
             displayProductTotals();
         } else {
