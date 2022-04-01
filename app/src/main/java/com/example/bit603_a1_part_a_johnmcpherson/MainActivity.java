@@ -36,21 +36,29 @@ public class MainActivity extends AppCompatActivity {
     private final HashMap<String,Integer> salesTotals = new HashMap<>(); // to record a sales total for each product
     private final ArrayList<String> salesRegister = new ArrayList<>(); // to record each sale
 
-    // displayLeaderMessage declared outside onCreate; so it can be accessed by updateWinnerMessage()
+    // declare these widgets outside onCreate; so they can be accessed by functions that update them
+    Button buttonKiwi;
+    Button buttonTiki;
+    Button buttonBuzzyBee;
+    Button buttonGumboots;
     TextView textViewLeaderMessage;
+
+    private boolean displayTotals = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // create a button variable for each button
-        Button buttonKiwi = findViewById(R.id.buttonKiwi);
-        Button buttonTiki = findViewById(R.id.buttonTiki);
-        Button buttonBuzzyBee = findViewById(R.id.buttonBuzzyBee);
-        Button buttonGumboots = findViewById(R.id.buttonGumboots);
-        // See comment in strings file (for how we have initialised this message for no sales)
+        // inialise button variables for each product and the leader message
+        buttonKiwi = findViewById(R.id.buttonKiwi);
+        buttonTiki = findViewById(R.id.buttonTiki);
+        buttonBuzzyBee = findViewById(R.id.buttonBuzzyBee);
+        buttonGumboots = findViewById(R.id.buttonGumboots);
+        // See comment in strings file (for how we initialise this message for no sales)
         textViewLeaderMessage = findViewById(R.id.textViewCurrentLeader);
+
+        Button buttonToggleCounters = findViewById(R.id.buttonToggleCounters);
 
         // add click listeners to do the sales updates
 
@@ -78,11 +86,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // initialise salesTotals
-        for (String productName: productTypes) {
-            salesTotals.put(productName, 0);
-        }
-
         buttonGumboots.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -91,6 +94,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonToggleCounters.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // toggle whether or not we should display counters
+                displayTotals = !displayTotals;
+
+                // update the product button displays (based on the new value of displayTotals)
+                updateProductButtons();
+            }
+        });
+
+        // initialise salesTotals
+        for (String productName: productTypes) {
+            salesTotals.put(productName, 0);
+        }
     }
 
 
@@ -98,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
     // Collected here to avoid repeating ourselves (DRY principle)
     private void updateSalesRecordsAndLeaderMessage(String product) {
         updateSalesTotal(product);
+
+        updateProductButtons();
 
         updateSalesRegister(product);
 
@@ -173,6 +194,22 @@ public class MainActivity extends AppCompatActivity {
 
         // display the message
         textViewLeaderMessage.setText(leaderDisplayString);
+    }
+
+    private void updateProductButtons() {
+        if (displayTotals) {
+            displayProductTotals();
+        } else {
+            displayProductNames();
+        }
+    }
+
+    private void displayProductTotals() {
+        String kiwiTotal = String.valueOf(salesTotals.get(KEY_KIWI));
+        buttonKiwi.setText(kiwiTotal);
+    }
+
+    private void displayProductNames() {
     }
 
     // Save the salesTotals and salesRegister when the screen is rotated. Otherwise we lose them!
