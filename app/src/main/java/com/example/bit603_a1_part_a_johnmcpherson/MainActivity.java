@@ -136,17 +136,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateLeaderMessage() {
         HashMap<String, Integer> leadingTotals = new HashMap<>();
+
+        // Load leadingTotals with one or more product/total sales HashMap Entries. Multiple entries means joint leaders.
         Integer leadingValue = 0;
         for (HashMap.Entry<String, Integer> salesTotalToTest: salesTotals.entrySet()) {
             if (leadingTotals.isEmpty() || salesTotalToTest.getValue() > leadingValue) {
                 // we have a new clear leader
                 // - by virtue of this being the first total tested
                 // - OR because this score is greater than the last highest
-                // so we make sure our new entry is the only one
+                // so we make sure our new entry is the only one by clearing leadingTotals
+                // clear() is redundant if leadingTotals is already empty. But it allows a clean set of conditional logic.
                 leadingTotals.clear();
                 leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
                 leadingValue = salesTotalToTest.getValue();
             } else if (salesTotalToTest.getValue().equals(leadingValue)) {
+                // we have joint leaders. This will work even if all products have zero sales
                 leadingTotals.put(salesTotalToTest.getKey(), salesTotalToTest.getValue());
             }
         }
@@ -157,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
         Iterator<Map.Entry<String, Integer>> entrySetIterator = leadingTotals.entrySet().iterator();
 
         String leaderListString = "";
-        // entrySetIterator should always haveNext(). But, it is simpler and safer to put in a check now
-        // than to risk a change of logic (above) that allows entrySetIterator.hasNext() to be false (and cause an exception)
+        // entrySetIterator should always haveNext(). But, it is safer to put in a check now
+        // than to risk a future change of logic (above) that allows entrySetIterator.hasNext() to be false (and cause an exception)
         if (entrySetIterator.hasNext()) {
             leaderListString = entrySetIterator.next().getKey();
         }
@@ -167,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         // we have identified a leader. Test to see if there are more
         if (entrySetIterator.hasNext()) { // We have more than one leader, so our header text is set up accordingly
             leaderHeaderString = getString(R.string.current_leaders_header); // use plural
-        } else {
+        } else { // there is only one leader, so we use a singular header
             leaderHeaderString = getString(R.string.current_leader_header);
         }
 
