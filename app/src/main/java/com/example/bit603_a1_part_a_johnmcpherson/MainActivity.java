@@ -9,6 +9,10 @@
 
     -   I have also assumed that L02 "An advanced approach has been taken" means that use of lambdas is OK (despite not being taught
         in the course
+
+    -   Button colours are different from the mockup. I changed the theme colour to make the Action bar black (as in the mockup).
+        This made the buttons black. Rather than fight what the theme was trying to achieve, I went with it.
+        In a real project I would discuss this with the designer.
 */
 
 package com.example.bit603_a1_part_a_johnmcpherson;
