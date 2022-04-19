@@ -4,7 +4,6 @@
     <string name="tiki">Tiki</string>
     <string name="buzzy_bee">Buzzy Bee</string>
     <string name="gumboots">Gumboots</string>
-    <!-- ":" not included in the labels. If we translated to another language the ":" is not a natural part of the translation -->
     <!-- It's not helpful to have all four products as joint leaders, when there are no sales. So create a specific message for that situation -->
     <string name="currentLeaderNoSales">Current Leader: (no sales yet)</string>
     <string name="toggle_counters">Toggle Counters</string>

@@ -12,6 +12,8 @@
 
     -   Button colours are different from the mockup. I changed the theme colour to make the Action bar black (as in the mockup).
         This made the buttons black. Rather than fight what the theme was trying to achieve, I went with it.
+         - Themes have not been discussed in the course material - to this point
+         - "The client does not mind if it is not exactly as shown"
         In a real project I would discuss this with the designer.
 */
 
@@ -32,6 +34,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    // The following fields (including some widgets) are all used outside onCreate(). So declared (and sometimes initialised) here
+
     private final String TAG = "MainActivity";
 
     // these keys are used more than once, so use constants to avoid problems with mis-spelling
@@ -41,19 +45,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     // buttonToProductNme is used to:
-    // - identify the sales total to update each button (main reason)
-    // - reduce the code required to set the "product button"" OnClickListeners (a bonus)
+    // - identify the sales total to update when the relevant button is pressed (main reason)
+    // - reduce replication of code required to set the OnClickListeners for these buttons (a bonus)
     private final HashMap<Button, String> buttonToProductName = new HashMap<>();
 
-    private final HashMap<String,Integer> salesTotals = new HashMap<>(); // to record a sales total for each product
-    private final ArrayList<String> salesRegister = new ArrayList<>(); // to record each sale
+    private final HashMap<String,Integer> salesTotals = new HashMap<>(); // Hash map to record the number of cupcakes sold
+    private final ArrayList<String> salesList = new ArrayList<>(); // List to store the names of cupcakes in the order they are sold
 
-    // declare these widgets outside onCreate; so they can be accessed by functions that update them
-    Button buttonKiwi;
-    Button buttonTiki;
-    Button buttonBuzzyBee;
-    Button buttonGumboots;
-    TextView textViewLeaderMessage;
+    private Button buttonKiwi;
+    private Button buttonTiki;
+    private Button buttonBuzzyBee;
+    private Button buttonGumboots;
+    private TextView textViewLeaderMessage;
 
     private boolean displayTotals = false;
 
@@ -70,26 +73,29 @@ public class MainActivity extends AppCompatActivity {
         // See comment in strings file (for how we initialise this message for no sales)
         textViewLeaderMessage = findViewById(R.id.textViewCurrentLeader);
 
+        // initialise buttonToggleCounters
         Button buttonToggleCounters = findViewById(R.id.buttonToggleCounters);
 
-        //initialise buttonToProductName
+        //initialise buttonToProductName hash map
         buttonToProductName.put(buttonKiwi, "Kiwi");
         buttonToProductName.put(buttonTiki, "Tiki");
         buttonToProductName.put(buttonBuzzyBee, "Buzzy Bee");
         buttonToProductName.put(buttonGumboots, "Gumboots");
 
-        // add OnClicklisteners to do the sales updates
-        // we created buttonToProduct to help us update the displayed totals
-        // But since we have that map, we can use it here to help us set the OnClickListener for each button
+        // Add OnClicklisteners to do the sales updates
+        // We created buttonToProduct to help us update the displayed totals,
+        // and use it here to help us set the OnClickListener for each button
 
         for (HashMap.Entry<Button, String> buttonEntry : buttonToProductName.entrySet()) {
             Button productButton = buttonEntry.getKey();
             String productKey = buttonEntry.getValue();
+            // use lambda to set the onClickListener (shorter syntax)
             productButton.setOnClickListener(v -> updateSalesRecordsAndLeaderMessage(productKey));
         }
 
 
         // allow the Toggle Counters button to make the display change
+        // (using lambda)
         buttonToggleCounters.setOnClickListener(v -> {
             // toggle whether or not we should display counters
             displayTotals = !displayTotals;
@@ -109,17 +115,17 @@ public class MainActivity extends AppCompatActivity {
     // There is a common pattern for the sale of each product.
     // Collected here to avoid repeating ourselves (DRY principle)
     private void updateSalesRecordsAndLeaderMessage(String product) {
-        updateSalesTotal(product);
+        updateSalesTotal(product); // update the sales total for the relevant product
 
-        updateProductButtons();
+        updateProductButtons(); // (the method will decide whether totals or names are required
 
-        updateSalesRegister(product);
+        updateSalesListAndWriteToLog(product); //record the sale of the product and write to the log
 
-        updateLeaderMessage();
+        determineAndDisplayMostSold(); // update the Current Leader(s)
     }
 
      // use a common method for all salesTotal increments. Reduces repetition (DRY principle)
-    @SuppressWarnings("ConstantConditions") // ignoring the unboxing warning. We have initialised (or updated) each salesTotal
+    @SuppressWarnings("ConstantConditions") // we can suppress the unboxing warning. We have previously initialised (or updated) each salesTotal
     private void updateSalesTotal(String product) {
 
         // get the current sales total (for this product) and increase it by one
@@ -127,15 +133,18 @@ public class MainActivity extends AppCompatActivity {
         salesTotals.put(product, currentTotal + 1); // safe, because currentTotal has previously been initialised or updated
     }
 
-    private void updateSalesRegister(String product) {
-        // add product to the sales register
-        salesRegister.add(product);
+    // use a common method for all product sales. Reduces repetition (DRY principle)
+    private void updateSalesListAndWriteToLog(String product) {
+        // add cupcake sale to the list of cupcakes sold
+        salesList.add(product);
 
-        // demonstrate that the sales register contains all sales to now
-        Log.d(TAG, "All sales: " + salesRegister);
+        // write to the log whenever a sale is made (as requested)
+        Log.d(TAG, "All sales: " + salesList);
     }
 
-    private void updateLeaderMessage() {
+    // separate method to determine the most sold cupcake(s)
+    // includes display of the result
+    private void determineAndDisplayMostSold() {
         HashMap<String, Integer> leadingTotals = new HashMap<>();
 
         // Load leadingTotals with one or more product/total sales HashMap Entries. Multiple entries means joint leaders.
@@ -191,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         textViewLeaderMessage.setText(leaderDisplayString);
     }
 
-    // this functionality is used in two places. So extracted into a separate function
+    // this functionality is used more than once. So extracted into a separate method
     private void updateProductButtons() {
         // update the "product buttons", depending on current value of displayTotals
         if (displayTotals) {
@@ -204,10 +213,15 @@ public class MainActivity extends AppCompatActivity {
     private void displayProductTotals() {
         // using the two hashmaps allows us to build and debug code to update all the buttons in one set of code
         // slightly more complex; but we avoid repeating the same code pattern 4 times
+
+        // loop through all the "product" buttons
         for (HashMap.Entry<Button, String> buttonEntry: buttonToProductName.entrySet()) {
+            // get the product string for the button
             Button button = buttonEntry.getKey();
             String productName = buttonEntry.getValue();
+            // use the product string to find the sales total (that is stored in the salesTotals hash map)
             Integer salesTotal = salesTotals.get(productName);
+            // and display it on the relevant button
             button.setText(String.valueOf(salesTotal));
         }
     }
@@ -241,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
     // save the sales register for later retrieval
     private void saveSalesRegister(Bundle outState) {
         // the complete salesRegister will be saved
-        outState.putStringArrayList(KEY_SALES_REGISTER, salesRegister);
+        outState.putStringArrayList(KEY_SALES_REGISTER, salesList);
     }
 
     private void saveDisplayTotalsFlag(Bundle outState) {
@@ -259,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
 
         // update the display, based on the restored data
         updateProductButtons();
-        updateLeaderMessage();
+        determineAndDisplayMostSold();
     }
 
     // restore the sales totals
@@ -278,10 +292,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void restoreSalesRegister(Bundle savedInstanceState) {
         // load the salesRegister with salesRegister entries that we saved to the savedInstanceState
-        salesRegister.addAll(savedInstanceState.getStringArrayList(KEY_SALES_REGISTER));
+        salesList.addAll(savedInstanceState.getStringArrayList(KEY_SALES_REGISTER));
 
         // demonstrate that salesRegister is restored
-        Log.d(TAG, "Restored salesRegister to: " + salesRegister);
+        Log.d(TAG, "Restored salesRegister to: " + salesList);
     }
 
     private void restoreDisplayTotalsFlag(Bundle savedInstanceState) {
