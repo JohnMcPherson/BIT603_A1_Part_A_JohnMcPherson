@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
         // initialise buttonToggleCounters
         Button buttonToggleCounters = findViewById(R.id.buttonToggleCounters);
 
-        //initialise buttonToProductName hash map
+        // initialise buttonToProductName hash map
+        // *** this effectively creates our master list of products, used throughout the app ***
         buttonToProductName.put(buttonKiwi, "Kiwi");
         buttonToProductName.put(buttonTiki, "Tiki");
         buttonToProductName.put(buttonBuzzyBee, "Buzzy Bee");
@@ -285,14 +286,18 @@ public class MainActivity extends AppCompatActivity {
 
     // restore the sales totals
     private void restoreSalesTotals(Bundle savedInstanceState) {
+        // loop through our products "master list" (the list of buttons, that are mapped to product names)
+        // to tell us which product totals we expect to have been saved
         for (Map.Entry<Button, String> buttonAndProductName: buttonToProductName.entrySet()) {
-            String totalKey = buttonAndProductName.getValue();
-            if (savedInstanceState.containsKey(totalKey)) { // check that this product total was saved. It should have been!
-                //load the relevant sales total with the saved total
-                salesTotals.put(totalKey, savedInstanceState.getInt(totalKey));
+            String product = buttonAndProductName.getValue();
+            if (savedInstanceState.containsKey(product)) { // check that this product total was saved. It should have been!
+                // restore the total for this product
+                Integer salesTotal = savedInstanceState.getInt(product);
+                //and load back into the salesTotals list
+                salesTotals.put(product, salesTotal);
 
                 // Demonstrate that the total has been restored correctly
-                Log.d(TAG, "Sales of " + totalKey + " restored to " + salesTotals.get(totalKey));
+                Log.d(TAG, "Sales of " + product + " restored to " + salesTotals.get(product));
             }
         }
     }
