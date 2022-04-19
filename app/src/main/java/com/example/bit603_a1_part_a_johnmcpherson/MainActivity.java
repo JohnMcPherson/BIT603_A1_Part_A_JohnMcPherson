@@ -124,10 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
         // get the current sales total (for this product) and increase it by one
         Integer currentTotal = salesTotals.get(product);
-        salesTotals.put(product, currentTotal + 1);
-
-        // provide debug logging to test that increments are working correctly
-        Log.d(TAG, "Sales of " + product + " increased to " + salesTotals.get(product));
+        salesTotals.put(product, currentTotal + 1); // safe, because currentTotal has previously been initialised or updated
     }
 
     private void updateSalesRegister(String product) {
