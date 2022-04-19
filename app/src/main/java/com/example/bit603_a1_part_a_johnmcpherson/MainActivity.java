@@ -15,6 +15,8 @@
          - Themes have not been discussed in the course material - to this point
          - "The client does not mind if it is not exactly as shown"
         In a real project I would discuss this with the designer.
+
+        TODO separate buttons and product List
 */
 
 package com.example.bit603_a1_part_a_johnmcpherson;
