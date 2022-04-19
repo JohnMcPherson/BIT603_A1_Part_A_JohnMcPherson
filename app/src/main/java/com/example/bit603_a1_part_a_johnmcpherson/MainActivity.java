@@ -295,9 +295,6 @@ public class MainActivity extends AppCompatActivity {
                 Integer salesTotal = savedInstanceState.getInt(product);
                 //and load back into the salesTotals list
                 salesTotals.put(product, salesTotal);
-
-                // Demonstrate that the total has been restored correctly
-                Log.d(TAG, "Sales of " + product + " restored to " + salesTotals.get(product));
             }
         }
     }
