@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import static com.example.bit603_a1_part_a_johnmcpherson.Product.*;
+
 public class MainActivity extends AppCompatActivity {
 
     // The following fields (including some widgets) are all used outside onCreate(). So declared (and sometimes initialised) here
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // inialise button variables for each product and the leader message
+        // initialise button variables for each product and the leader message
         buttonKiwi = findViewById(R.id.buttonKiwi);
         buttonTiki = findViewById(R.id.buttonTiki);
         buttonBuzzyBee = findViewById(R.id.buttonBuzzyBee);
@@ -79,18 +81,15 @@ public class MainActivity extends AppCompatActivity {
         Button buttonToggleCounters = findViewById(R.id.buttonToggleCounters);
 
         // initialise buttonToProductName hash map
-        // *************************************************************************************
-        // *** this effectively creates our "master list" of products, used throughout the app ***
-        // *************************************************************************************
-        buttonToProductName.put(buttonKiwi, "Kiwi");
-        buttonToProductName.put(buttonTiki, "Tiki");
-        buttonToProductName.put(buttonBuzzyBee, "Buzzy Bee");
-        buttonToProductName.put(buttonGumboots, "Gumboots");
+        // use the Product enum to ensure that spelling is consistent throughout the app
+        buttonToProductName.put(buttonKiwi, KIWI.getName());
+        buttonToProductName.put(buttonTiki, TIKI.getName());
+        buttonToProductName.put(buttonBuzzyBee, BUZZY_BEE.getName());
+        buttonToProductName.put(buttonGumboots, GUMBOOTS.getName());
 
         // Add OnClicklisteners to do the sales updates
         // We created buttonToProduct to help us update the displayed totals,
         // and use it here to help us set the OnClickListener for each button
-
         for (HashMap.Entry<Button, String> buttonEntry : buttonToProductName.entrySet()) {
             Button productButton = buttonEntry.getKey();
             String productKey = buttonEntry.getValue();
@@ -290,15 +289,14 @@ public class MainActivity extends AppCompatActivity {
 
     // restore the sales totals
     private void restoreSalesTotals(Bundle savedInstanceState) {
-        // loop through our products "master list" (the list of buttons, that are mapped to product names)
-        // to tell us which product totals we expect to have been saved
-        for (Map.Entry<Button, String> buttonAndProductName: buttonToProductName.entrySet()) {
-            String product = buttonAndProductName.getValue();
-            if (savedInstanceState.containsKey(product)) { // check that this product total was saved. It should have been!
-                // restore the total for this product
-                Integer salesTotal = savedInstanceState.getInt(product);
+        // loop through our Product (enum) values which tells us which product totals we expect to have been saved
+        for (Product product: Product.values()) {
+            String productName = product.getName();
+            if (savedInstanceState.containsKey(productName)) { // check that this product total was saved. It should have been!
+                // get the saved total for this product
+                Integer salesTotal = savedInstanceState.getInt(productName);
                 //and load back into the salesTotals list
-                salesTotals.put(product, salesTotal);
+                salesTotals.put(productName, salesTotal);
             }
         }
 

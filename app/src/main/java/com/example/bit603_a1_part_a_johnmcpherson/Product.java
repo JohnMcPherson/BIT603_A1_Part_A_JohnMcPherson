@@ -1,3 +1,7 @@
+/*
+    Our master list of products, with product names
+*/
+
 package com.example.bit603_a1_part_a_johnmcpherson;
 
 public enum Product {
@@ -8,7 +12,7 @@ public enum Product {
 
     private String name;
 
-    private Product(String name) {
+    Product(String name) {
         this.name = name;
     }
 
