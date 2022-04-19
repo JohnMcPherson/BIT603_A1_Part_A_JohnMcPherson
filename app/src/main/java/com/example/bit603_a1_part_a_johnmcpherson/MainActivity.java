@@ -247,18 +247,24 @@ public class MainActivity extends AppCompatActivity {
 
     // save the sales totals for later retrieval
     private void saveSalesTotals(@NonNull Bundle outState) {
+        // loop through the sales totals hash map
         for (HashMap.Entry<String, Integer> salesTotalEntry: salesTotals.entrySet()) {
-            outState.putInt(salesTotalEntry.getKey(), salesTotalEntry.getValue());
+            // get the product and the total
+            String product = salesTotalEntry.getKey();
+            Integer total = salesTotalEntry.getValue();
+            // using the product (name) as the key, store the total in outState
+            outState.putInt(product, total);
         }
     }
 
     // save the sales register for later retrieval
     private void saveSalesRegister(Bundle outState) {
-        // the complete salesRegister will be saved
+        // store the complete salesRegister ArrayList for later retrieval
         outState.putStringArrayList(KEY_SALES_REGISTER, salesList);
     }
 
     private void saveDisplayTotalsFlag(Bundle outState) {
+        // save the flag that determines whether to display totals or product names
         outState.putBoolean(KEY_DISPLAY_TOTALS_FLAG, displayTotals);
     }
 
@@ -267,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        // restore the saved data
         restoreSalesTotals(savedInstanceState);
         restoreSalesRegister(savedInstanceState);
         restoreDisplayTotalsFlag(savedInstanceState);
