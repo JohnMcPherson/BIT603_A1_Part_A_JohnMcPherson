@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
 
     // these keys are used more than once, so use constants to avoid problems with mis-spelling
-    private final String KEY_SALES_REGISTER = "salesRegister";
+    private final String KEY_SALES_LIST = "salesRegister";
     private final String KEY_DISPLAY_TOTALS_FLAG = "displayTotalsFlag";
 
 
@@ -77,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
         Button buttonToggleCounters = findViewById(R.id.buttonToggleCounters);
 
         // initialise buttonToProductName hash map
-        // *** this effectively creates our master list of products, used throughout the app ***
+        // *************************************************************************************
+        // *** this effectively creates our "master list" of products, used throughout the app ***
+        // *************************************************************************************
         buttonToProductName.put(buttonKiwi, "Kiwi");
         buttonToProductName.put(buttonTiki, "Tiki");
         buttonToProductName.put(buttonBuzzyBee, "Buzzy Bee");
@@ -213,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayProductTotals() {
         // using the two hashmaps allows us to build and debug code to update all the buttons in one set of code
-        // slightly more complex; but we avoid repeating the same code pattern 4 times
+        // slightly more complex; but we reduce repetition
 
         // loop through all the "product" buttons
         for (HashMap.Entry<Button, String> buttonEntry: buttonToProductName.entrySet()) {
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         saveSalesTotals(outState);
-        saveSalesRegister(outState);
+        saveSalesList(outState);
         saveDisplayTotalsFlag(outState);
     }
 
@@ -259,9 +261,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // save the sales register for later retrieval
-    private void saveSalesRegister(Bundle outState) {
-        // store the complete salesRegister ArrayList for later retrieval
-        outState.putStringArrayList(KEY_SALES_REGISTER, salesList);
+    private void saveSalesList(Bundle outState) {
+        // store the complete salesList ArrayList for later retrieval
+        outState.putStringArrayList(KEY_SALES_LIST, salesList);
     }
 
     private void saveDisplayTotalsFlag(Bundle outState) {
@@ -276,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
         // restore the saved data
         restoreSalesTotals(savedInstanceState);
-        restoreSalesRegister(savedInstanceState);
+        restoreSalesList(savedInstanceState);
         restoreDisplayTotalsFlag(savedInstanceState);
 
         // update the display, based on the restored data
@@ -297,17 +299,21 @@ public class MainActivity extends AppCompatActivity {
                 salesTotals.put(product, salesTotal);
             }
         }
+
+        // tested by checking buttons display the same totals before and after rotation
     }
 
-    private void restoreSalesRegister(Bundle savedInstanceState) {
+    private void restoreSalesList(Bundle savedInstanceState) {
         // load the salesRegister with salesRegister entries that we saved to the savedInstanceState
-        salesList.addAll(savedInstanceState.getStringArrayList(KEY_SALES_REGISTER));
+        salesList.addAll(savedInstanceState.getStringArrayList(KEY_SALES_LIST));
 
-        // demonstrate that salesRegister is restored
-        Log.d(TAG, "Restored salesRegister to: " + salesList);
+        // confirm that salesRegister is restored
+        Log.d(TAG, "Restored salesList to: " + salesList);
     }
 
     private void restoreDisplayTotalsFlag(Bundle savedInstanceState) {
         displayTotals = savedInstanceState.getBoolean(KEY_DISPLAY_TOTALS_FLAG);
+
+        // tested by checking buttons display either totals or name, as before rotation
     }
 }
