@@ -7,6 +7,6 @@
     <!-- It's not helpful to have all four products as joint leaders, when there are no sales. So create a specific message for that situation -->
     <string name="currentLeaderNoSales">Current Leader: (no sales yet)</string>
     <string name="toggle_counters">Toggle Counters</string>
-    <string name="current_leaders_header">Current leaders</string>
+    <string name="multiple_leaders_header">Current leaders</string>
     <string name="current_leader_header">Current leader</string>
 </resources>

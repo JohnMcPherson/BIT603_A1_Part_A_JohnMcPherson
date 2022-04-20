@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         String leaderHeaderString;
         // we have identified a leader. Test to see if there are more
         if (entrySetIterator.hasNext()) { // We have more than one leader, so our header text is set up accordingly
-            leaderHeaderString = getString(R.string.current_leaders_header); // use plural
+            leaderHeaderString = getString(R.string.multiple_leaders_header); // use plural
         } else { // there is only one leader, so we use a singular header
             leaderHeaderString = getString(R.string.current_leader_header);
         }
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         buttonGumboots.setText(getString(R.string.gumboots));
     }
 
-    // Save the salesTotals and salesRegister when the screen is rotated. Otherwise we lose them!
+    // Save the salesTotals, salesRegister and displayTotalsFlag when the screen is rotated. Otherwise we lose them!
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
 
@@ -267,8 +267,8 @@ public class MainActivity extends AppCompatActivity {
         outState.putStringArrayList(KEY_SALES_LIST, salesList);
     }
 
+    // save the flag that determines whether to display totals or product names
     private void saveDisplayTotalsFlag(Bundle outState) {
-        // save the flag that determines whether to display totals or product names
         outState.putBoolean(KEY_DISPLAY_TOTALS_FLAG, displayTotals);
     }
 
