@@ -41,11 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-
-
-    // buttonToProductName is used to:
-    // - identify the product sold when the relevant button is pressed (main reason)
-    // - reduce replication in code used to set the OnClickListeners for these buttons (a bonus)
+    // buttonToProductName is used:
+    // - when we set OnClickListeners for the buttons (we need the product name)
+    // - when we display the totals on the buttons. We need the list of buttons to be updated, and the name of the associated product
+    //   (so we can get the total)
     private final HashMap<Button, String> buttonToProductName = new HashMap<>();
 
     // declare and initialise salesTotals
@@ -92,8 +91,7 @@ public class MainActivity extends AppCompatActivity {
         buttonToProductName.put(buttonGumboots, GUMBOOTS.getName());
 
         // Add OnClicklisteners to do the sales updates
-        // We created buttonToProduct to help us update the displayed totals,
-        // and use it here to help us set the OnClickListener for each button
+        // using buttonToProductName reduces code duplication. The code is the same for each of the 4 OnClickListeners
         for (HashMap.Entry<Button, String> buttonEntry : buttonToProductName.entrySet()) {
             Button productButton = buttonEntry.getKey();
             String productKey = buttonEntry.getValue();
@@ -231,6 +229,9 @@ public class MainActivity extends AppCompatActivity {
 
     // called (or not), by updateProductButtons, dependant on the setting of displayTotalsFlag
     private void displayProductNames() {
+        // the text used here has a different use from the product names in the Product class
+        // these are display names, Product contains the internal names required to make the app work
+        // So, we don't try to combine them
         buttonKiwi.setText(getString(R.string.kiwi));
         buttonTiki.setText(getString(R.string.tiki));
         buttonBuzzyBee.setText(getString(R.string.buzzy_bee));
