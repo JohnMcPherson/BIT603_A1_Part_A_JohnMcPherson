@@ -282,7 +282,6 @@ public class MainActivity extends AppCompatActivity {
 
         // restore the saved data
         restoreSalesTotals(savedInstanceState);
-        restoreSalesList(savedInstanceState);
 
         // update the display, based on the restored data
         updateProductButtons();
@@ -303,13 +302,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // tested by checking buttons display the same totals before and after rotation
-    }
-
-    private void restoreSalesList(Bundle savedInstanceState) {
-        // load the salesRegister with salesRegister entries that we saved to the savedInstanceState
-        salesList.addAll(savedInstanceState.getStringArrayList(KEY_SALES_LIST));
-
-        // confirm that salesRegister is restored
-        Log.d(TAG, "Restored salesList to: " + salesList);
     }
 }
