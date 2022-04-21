@@ -280,6 +280,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        // test that the salesList is intact, after rotation
+        Log.d(TAG, "All Sales (after device rotation): " + salesList);
+
         // restore the saved data
         restoreSalesTotals(savedInstanceState);
 
