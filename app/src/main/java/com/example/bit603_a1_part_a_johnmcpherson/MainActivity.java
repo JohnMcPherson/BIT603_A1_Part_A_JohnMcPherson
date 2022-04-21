@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         // test that the salesList is intact, after rotation
         Log.d(TAG, "All Sales (after device rotation): " + salesList);
 
-        // update the display, based on the restored data
+        // update the display, based on saved data
         updateProductButtons();
         determineAndDisplayMostSold();
     }
