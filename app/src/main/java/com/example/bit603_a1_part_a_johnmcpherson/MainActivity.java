@@ -12,11 +12,11 @@
 
     -   Button colours are different from the mockup. I changed the theme colour to make the Action bar black (as in the mockup).
         This made the buttons black. Rather than fight what the theme was trying to achieve, I went with it.
-         - Themes have not been discussed in the course material - to this point
-         - "The client does not mind if it is not exactly as shown"
-        In a real project I would discuss this with the designer.
+        ("The client does not mind if it is not exactly as shown")
+        In a real project I would discuss this with the designer or client.
 
-        TODO separate buttons and product List
+        TODO check - separate buttons and product List
+        TODO revise how restore on rotate is done
 */
 
 package com.example.bit603_a1_part_a_johnmcpherson;
