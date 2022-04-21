@@ -53,8 +53,17 @@ public class MainActivity extends AppCompatActivity {
     // - reduce replication of code required to set the OnClickListeners for these buttons (a bonus)
     private final HashMap<Button, String> buttonToProductName = new HashMap<>();
 
-    private final HashMap<String,Integer> salesTotals = new HashMap<>(); // Hash map to record the number of cupcakes sold
-    private final ArrayList<String> salesList = new ArrayList<>(); // List to store the names of cupcakes in the order they are sold
+    // declare and initialise salesTotals
+    private static final HashMap<String,Integer> salesTotals = new HashMap<>(); // Hash map to record the number of cupcakes sold
+    static {
+        // initialise salesTotals. Static, so it only gets done once
+        for (Product product: Product.values()) {
+            String productName = product.getName();
+            salesTotals.put(productName, 0);
+        }
+    }
+
+    private static final ArrayList<String> salesList = new ArrayList<>(); // List to store the names of cupcakes in the order they are sold
 
     private Button buttonKiwi;
     private Button buttonTiki;
@@ -107,12 +116,6 @@ public class MainActivity extends AppCompatActivity {
             // update the product button displays (based on the new value of displayTotals)
             updateProductButtons();
         });
-
-        // initialise salesTotals
-        for (Map.Entry<Button, String> buttonToProductNameEntry: buttonToProductName.entrySet()) {
-            String productName = buttonToProductNameEntry.getValue();
-            salesTotals.put(productName, 0);
-        }
     }
 
 
@@ -295,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                 // get the saved total for this product
                 Integer salesTotal = savedInstanceState.getInt(productName);
                 //and load back into the salesTotals list
-                salesTotals.put(productName, salesTotal);
+ //               salesTotals.put(productName, salesTotal);
             }
         }
 
