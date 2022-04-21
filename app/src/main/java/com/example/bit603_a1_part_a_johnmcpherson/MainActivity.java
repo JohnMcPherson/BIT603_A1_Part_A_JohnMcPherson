@@ -283,27 +283,8 @@ public class MainActivity extends AppCompatActivity {
         // test that the salesList is intact, after rotation
         Log.d(TAG, "All Sales (after device rotation): " + salesList);
 
-        // restore the saved data
-        restoreSalesTotals(savedInstanceState);
-
         // update the display, based on the restored data
         updateProductButtons();
         determineAndDisplayMostSold();
-    }
-
-    // restore the sales totals
-    private void restoreSalesTotals(Bundle savedInstanceState) {
-        // loop through our Product (enum) values which tells us which product totals we expect to have been saved
-        for (Product product: Product.values()) {
-            String productName = product.getName();
-            if (savedInstanceState.containsKey(productName)) { // check that this product total was saved. It should have been!
-                // get the saved total for this product
-                Integer salesTotal = savedInstanceState.getInt(productName);
-                //and load back into the salesTotals list
- //               salesTotals.put(productName, salesTotal);
-            }
-        }
-
-        // tested by checking buttons display the same totals before and after rotation
     }
 }
