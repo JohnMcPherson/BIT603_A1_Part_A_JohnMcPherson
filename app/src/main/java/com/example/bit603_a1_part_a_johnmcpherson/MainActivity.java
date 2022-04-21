@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
 
     // these keys are used more than once, so use constants to avoid problems with mis-spelling
-    private final String KEY_SALES_LIST = "salesRegister";
+    private final String KEY_SALES_LIST = "salesList";
     private final String KEY_DISPLAY_TOTALS_FLAG = "displayTotalsFlag";
 
 
