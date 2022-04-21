@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     //   (so we can get the total)
     private final HashMap<Button, String> buttonToProductName = new HashMap<>();
 
-    // declare and initialise salesTotals
+    // declare and initialise salesTotals. Static, allowing this field to survive rotation
     private static final HashMap<String,Integer> salesTotals = new HashMap<>(); // Hash map to record the totals for cupcakes sold
     static {
         // initialise salesTotals. Static, so it only gets done once
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Static, allowing this field to survive rotation
     private static final ArrayList<String> salesList = new ArrayList<>(); // List to store the names of cupcakes in the order they are sold
 
     private Button buttonKiwi;
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonGumboots;
     private TextView textViewLeaderMessage;
 
-    private static boolean displayTotals = false;
+    // Static, allowing this field to survive rotation
+    private static boolean displayTotals = false; // stores whether product buttons display names or totals
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         // get the current sales total (for this product) and increase it by one
         Integer currentTotal = salesTotals.get(product);
-        salesTotals.put(product, currentTotal + 1); // safe, because currentTotal has previously been initialised or updated
+        salesTotals.put(product, currentTotal + 1); // safe, because currentTotal has previously been initialised and/or updated
     }
 
     // use a common method for all product sales. Reduces repetition (DRY principle)
