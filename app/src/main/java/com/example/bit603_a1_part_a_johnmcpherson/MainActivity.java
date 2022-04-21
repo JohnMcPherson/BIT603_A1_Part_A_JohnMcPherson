@@ -16,7 +16,6 @@
         In a real project I would discuss this with the designer or client.
 
         TODO check - separate buttons and product List
-        TODO revise how restore on rotate is done
 */
 
 package com.example.bit603_a1_part_a_johnmcpherson;
@@ -48,13 +47,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    // buttonToProductNme is used to:
-    // - identify the sales total to update when the relevant button is pressed (main reason)
-    // - reduce replication of code required to set the OnClickListeners for these buttons (a bonus)
+    // buttonToProductName is used to:
+    // - identify the product sold when the relevant button is pressed (main reason)
+    // - reduce replication in code used to set the OnClickListeners for these buttons (a bonus)
     private final HashMap<Button, String> buttonToProductName = new HashMap<>();
 
     // declare and initialise salesTotals
-    private static final HashMap<String,Integer> salesTotals = new HashMap<>(); // Hash map to record the number of cupcakes sold
+    private static final HashMap<String,Integer> salesTotals = new HashMap<>(); // Hash map to record the totals for cupcakes sold
     static {
         // initialise salesTotals. Static, so it only gets done once
         for (Product product: Product.values()) {
@@ -217,8 +216,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // called (or not), by updateProductButtons, dependant on the setting of displayTotalsFlag
     private void displayProductTotals() {
-        // using the two hashmaps allows us to build and debug code to update all the buttons in one set of code
+        // using the two hash maps allows us to build and debug code to update all the buttons in one set of code
         // slightly more complex; but we reduce repetition
 
         // loop through all the "product" buttons
@@ -233,8 +233,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // called (or not), by updateProductButtons, dependant on the setting of displayTotalsFlag
     private void displayProductNames() {
-        // HashMap NOT used here because it's simpler to directly code the "map" between the button and the string value to be displayed
         buttonKiwi.setText(getString(R.string.kiwi));
         buttonTiki.setText(getString(R.string.tiki));
         buttonBuzzyBee.setText(getString(R.string.buzzy_bee));
