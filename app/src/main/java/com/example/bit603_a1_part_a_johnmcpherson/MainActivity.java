@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonGumboots;
     private TextView textViewLeaderMessage;
 
-    private boolean displayTotals = false;
+    private static boolean displayTotals = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
         // restore the saved data
         restoreSalesTotals(savedInstanceState);
         restoreSalesList(savedInstanceState);
-        restoreDisplayTotalsFlag(savedInstanceState);
 
         // update the display, based on the restored data
         updateProductButtons();
@@ -309,11 +308,5 @@ public class MainActivity extends AppCompatActivity {
 
         // confirm that salesRegister is restored
         Log.d(TAG, "Restored salesList to: " + salesList);
-    }
-
-    private void restoreDisplayTotalsFlag(Bundle savedInstanceState) {
-        displayTotals = savedInstanceState.getBoolean(KEY_DISPLAY_TOTALS_FLAG);
-
-        // tested by checking buttons display either totals or name, as before rotation
     }
 }
