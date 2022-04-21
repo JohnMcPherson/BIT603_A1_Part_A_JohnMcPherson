@@ -241,41 +241,8 @@ public class MainActivity extends AppCompatActivity {
         buttonGumboots.setText(getString(R.string.gumboots));
     }
 
-    // Save the salesTotals, salesRegister and displayTotalsFlag when the screen is rotated. Otherwise we lose them!
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
 
-        super.onSaveInstanceState(outState);
-
-        saveSalesTotals(outState);
-        saveSalesList(outState);
-        saveDisplayTotalsFlag(outState);
-    }
-
-    // save the sales totals for later retrieval
-    private void saveSalesTotals(@NonNull Bundle outState) {
-        // loop through the sales totals hash map
-        for (HashMap.Entry<String, Integer> salesTotalEntry: salesTotals.entrySet()) {
-            // get the product and the total
-            String product = salesTotalEntry.getKey();
-            Integer total = salesTotalEntry.getValue();
-            // using the product (name) as the key, store the total in outState
-            outState.putInt(product, total);
-        }
-    }
-
-    // save the sales register for later retrieval
-    private void saveSalesList(Bundle outState) {
-        // store the complete salesList ArrayList for later retrieval
-        outState.putStringArrayList(KEY_SALES_LIST, salesList);
-    }
-
-    // save the flag that determines whether to display totals or product names
-    private void saveDisplayTotalsFlag(Bundle outState) {
-        outState.putBoolean(KEY_DISPLAY_TOTALS_FLAG, displayTotals);
-    }
-
-    // restore the salesTotals and salesRegister in the new orientation
+    // restore the display in the new orientation
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
